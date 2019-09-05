@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Transfer 穿梭框</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+      .el-table thead tr .el-checkbox__input {
+      display: none;
+      }
+      .moveRight {
+      text-align: center;
+      margin-top: 30px;
+      }
+      .moveLeft {
+      margin-top: 10px;
+      }
+      .moveTop {
+      margin-top: 10px;
+      }
+      .moveDown{
+      margin-top: 10px;
+      }
+    </style>
+</head>
+<body>
+    <div id="paik">
+     <el-row :gutter="20">
+        <el-col :span="10">
+            <span style="color:#606266;font-size:16px">规则列表：</span>
+            <el-table :data="tableData" border ref="selection1" :header-cell-style="{background:'oldlace',color:'#606266'}"
+                @selection-change="checkAll" style="width: 100%;">
+                <el-table-column align="center" type="selection" width="30">
+                </el-table-column>
+                <el-table-column prop="ruleChildId" align="center" label="ID" width="90">
+                </el-table-column>
+                <el-table-column prop="ruleChildType" label="规则类型" width="180">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.ruleChildType == 1">日期</span>
+                        <span v-else-if="scope.row.ruleChildType == 2">大写英文顺序号</span>
+                        <span v-else-if="scope.row.ruleChildType == 3">小写英文顺序号</span>
+                        <span v-else-if="scope.row.ruleChildType == 4">数字顺序号</span>
+                        <span v-else>固定码</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="格式" width="80">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.ruleChildId==5||scope.row.ruleChildId==6||scope.row.ruleChildId==7" class="cell-edit-input">
+                            <el-input v-model="scope.row.name" maxlength="2" onInput="this.value=this.value.replace(/[^1-9]*$/,'')"></el-input>
+                        </span>
+                        <span v-if="!scope.row.ruleChildId==5||scope.row.ruleChildId==6||scope.row.ruleChildId==7" style="margin-left:10px;"
+                            class="cell-icon" @click="handleEdit(scope.$index,scope.row)">
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="address" label="位数" width="150">
+                </el-table-column>
+            </el-table>
+        </el-col>
+        <el-col :span="2.5">
+            <div class="moveRight">
+                <div @click="handelSelect">
+                    <el-button icon="el-icon-arrow-right" :disabled="nowSelectData.length?false:true" size="mini" type="primary">
+                        右移
+                    </el-button>
+                </div>
+                <div class="moveTop" @click="moveTop()">
+                    <el-button icon="el-icon-arrow-up" :disabled="nowSelectRightData.length?false:true" size="mini" type="primary">
+                        上移
+                    </el-button>
+                </div>
+                <div class="moveDown" @click="moveDown">
+                    <el-button icon="el-icon-arrow-down" :disabled="nowSelectRightData.length?false:true" size="mini" type="primary">
+                        下移
+                    </el-button>
+                </div>
+                <div class="moveLeft" @click="handleRemoveSelect">
+                    <el-button icon="el-icon-delete" :disabled="nowSelectRightData.length?false:true" size="mini" type="primary">
+                        删除
+                    </el-button>
+                </div>
+            </div>
+        </el-col>
+        <el-col :span="10">
+            <span style="color:#606266;font-size:16px">生成规则：</span>
+            <el-table :data="selectArr" border ref="selection" :header-cell-style="{background:'oldlace',color:'#606266'}"
+                @selection-change="checkRightAll" height="510px" @select="checkRightAll1" style="width: 100%">
+                <el-table-column align="center" type="selection" width="30">
+                </el-table-column>
+                <el-table-column prop="ruleChildId" align="center" label="ID" width="90">
+                </el-table-column>
+                <el-table-column prop="date" label="规则类型" width="180">
+                </el-table-column>
+                <el-table-column prop="name" label="格式" width="80">
+                </el-table-column>
+                <el-table-column prop="address" label="位数" width="150">
+                </el-table-column>
+            
+            </el-table>
+        </el-col>
+     </el-row>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.5.1/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.3.9/index.js"></script>
+<script src="tab.js"></script>
+</html>
